@@ -29,21 +29,21 @@ class Snake {
 
 	die() {
 		if(
-			(this.x >= (canvas.width/scl)-1 || this.x <= 0) || 
-			(this.y >= (canvas.height/scl)-1 || this.y <= 0)
+			(this.x > (canvas.width/scl) || this.x < 0) || 
+			(this.y > (canvas.height/scl) || this.y < 0)
 		) {
 			this.reset();
 		}
 
 		for(let i = 0; i < this.tail.length; i++) {
-			if(Math.abs(this.x - this.tail[i].x) <= 0 && Math.abs(this.y - this.tail[i].y) <= 0) {
+			if(Math.abs(this.x - this.tail[i].x) == 0 && Math.abs(this.y - this.tail[i].y) == 0) {
 				this.reset();
 			}
 		}
 	}
 
 	eat(food) {
-		if(Math.abs(this.x - food.x) <= 1 && Math.abs(this.y - food.y) <= 1) {	
+		if(Math.abs(this.x - food.x) < 1 && Math.abs(this.y - food.y) < 1) {	
 			this.tail.push({'x':this.x, 'y':this.y});
 			console.log(this.tail)
 			return true;
@@ -67,7 +67,7 @@ class Snake {
 
 	show() {
 		ctx.fillStyle = '#fff';
-		ctx.fillRect(this.x, this.y, 1, 1); //head of Snake	
+		ctx.fillRect(this.x, this.y, 1, 1); 
 
 		for(let i = 0; i < this.tail.length; i++) {
 			ctx.fillRect(this.tail[i].x, this.tail[i].y, 1, 1);
