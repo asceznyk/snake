@@ -7,16 +7,11 @@ ctx.scale(scl, scl);
 
 class Snake {
 	constructor() {
+		this.tail = [];
 		this.x = canvas.width/(2*scl);
-		this.y = canvas.height/(2*scl);
-		
-		this.w = 1;
-		this.h = 1;
-		
+		this.y = canvas.height/(2*scl);	
 		this.dx = 1;
 		this.dy = 0;
-		
-		this.tail = [];
 	}
 
 	dir(dx, dy) {
@@ -32,31 +27,51 @@ class Snake {
 		this.dy = 0;
 	}
 
-	hold() {
+	die() {
 		if(
 			(this.x >= (canvas.width/scl)-1 || this.x <= 0) || 
 			(this.y >= (canvas.height/scl)-1 || this.y <= 0)
 		) {
 			this.reset();
 		}
+
+		for(let i = 0; i < this.tail.length; i++) {
+			if(Math.abs(this.x - this.tail[i].x) <= 0 && Math.abs(this.y - this.tail[i].y) <= 0) {
+				this.reset();
+			}
+		}
 	}
 
 	eat(food) {
 		if(Math.abs(this.x - food.x) <= 1 && Math.abs(this.y - food.y) <= 1) {	
-			//do something to the snake!
+			this.tail.push({'x':this.x, 'y':this.y});
+			console.log(this.tail)
 			return true;
 		}
 	}
 
 	update() {
-		this.hold();
+		if (this.tail.length > 0) {
+			if (this.tail.length > 1) {
+				for(let i = 0; i < this.tail.length-1; i++) {
+					this.tail[i] = this.tail[i+1];
+				}
+			}
+			this.tail[this.tail.length-1] = {'x':this.x, y:this.y};
+		}
+
+
 		this.x += this.dx;
 		this.y += this.dy;
 	}
 
 	show() {
 		ctx.fillStyle = '#fff';
-		ctx.fillRect(this.x, this.y, this.w, this.h); //head of Snake	
+		ctx.fillRect(this.x, this.y, 1, 1); //head of Snake	
+
+		for(let i = 0; i < this.tail.length; i++) {
+			ctx.fillRect(this.tail[i].x, this.tail[i].y, 1, 1);
+		}
 	}
 }
 
@@ -86,6 +101,7 @@ function renderGame() {
 	ctx.fillRect(0,0,canvas.width,canvas.height);
 	
 	snake.update();
+	snake.die();
 	if(snake.eat(food)) {
 		food.place();
 	}
@@ -107,7 +123,7 @@ document.addEventListener('keydown', function(e) {
 
 let start = 0;
 function showGame(time) {
-	if((time-start) >= 50) {
+	if((time-start) >= 100) {
 		start = time;
 		renderGame();
 	}
