@@ -57,7 +57,7 @@ class Snake {
 					this.tail[i] = this.tail[i+1];
 				}
 			}
-			this.tail[this.tail.length-1] = {'x':this.x, y:this.y};
+			this.tail[this.tail.length-1] = {x:this.x, y:this.y};
 		}
 
 
