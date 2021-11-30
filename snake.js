@@ -45,7 +45,6 @@ class Snake {
 	eat(food) {
 		if(Math.abs(this.x - food.x) < 1 && Math.abs(this.y - food.y) < 1) {	
 			this.tail.push({'x':this.x, 'y':this.y});
-			console.log(this.tail)
 			return true;
 		}
 	}
